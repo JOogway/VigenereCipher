@@ -22,25 +22,28 @@ class Find
     sum = 0
   end
 
-  def mic block1,block2,alfa,g,key
-    znacznik = 0
-    sum=0
-    for i in 0..25
-    fi = block1.count(alfa[i])
-    fip = block2.count(alfa[i-g])
-    sigma = fi*fip
-    sum = sum + sigma
+  def mic block1,block2,alfa
+    znacznik = []
+    for j in 0..alfa.length-1
+      sum=0
+      for i in 0..25
+        fi = block1.count(alfa[i])
+        fip = block2.count(alfa[i-j])
+        sigma = fi*fip
+        sum = sum + sigma
+      end
+      n1 = block1.length
+      n2 = block2.length
+      deno = n1 * n2
+      mic = (sum.to_f/deno.to_f).round(4)
+
+      if mic >0.065
+        znacznik.push(alfa[j])
+      end
     end
-    znacznik = znacznik+1
-    n1 = block1.length
-    n2 = block2.length
-    deno = n1 * n2
-    mic = (sum.to_f/deno.to_f).round(4)
-    puts mic.round(3)
-    if mic <0.0665 && mic > 0.0661
-      key.push(alfa[znacznik+1])
-      puts "^"
-    end
+
+    puts znacznik.inspect
+
   end
   c = Find.new
 
@@ -71,22 +74,13 @@ class Find
   puts second.inspect
   puts third.inspect
 
-
   c.icm(first,alphabet,sum)
   c.icm(second,alphabet,sum)
   c.icm(third,alphabet,sum)
   puts " "
 
-  for i in 0..25
-    c.mic(first,second,alphabet,i,key)
-  end
-  puts " "
-  for i in 0..25
-    c.mic(second,third,alphabet,i,key)
-  end
-  puts " "
-  for i in 0..25
-    c.mic(first,third,alphabet,i,key)
-  end
-  puts "Klucz: #{key}"
+  c.mic(first,second,alphabet)
+  c.mic(first,third,alphabet)
+  c.mic(second,third,alphabet)
 end
+
